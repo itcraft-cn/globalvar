@@ -1,0 +1,15 @@
+.idea
+.vscode
+target
+
+Cargo.lock
+pyvenv.cfg
+hs_err_pid*.log
+*.zip
+event.py
+
+perf.data*
+flamegraph*
+*.log
+.~*
+
