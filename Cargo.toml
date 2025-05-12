@@ -4,14 +4,14 @@ version = "0.1.0"
 edition = "2021"
 authors = ["HellyGuo <hellyguo@foxmail.com>"]
 exclude = ["tests", "test_data", "benches", "examples", ".vscode"]
-homepage = ""
-repository = ""
+homepage = "https://itcraft.cn/globalvar/"
+repository = "https://github.com/itcraft-cn/globalvar"
 license = "Apache-2.0"
 readme = "README.md"
-description = ""
-categories = [""]
-documentation = ""
-keywords = [""]
+description = "declaring a global variable"
+categories = ["data-structures"]
+documentation = "https://docs.rs/crate/globalvar/latest"
+keywords = ["global"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
