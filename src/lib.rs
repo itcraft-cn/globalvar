@@ -3,6 +3,17 @@ use std::{ptr, sync::Mutex};
 
 static MTX_VARS: Mutex<Option<HashMap<String, u64>>> = Mutex::new(None);
 
+/// Initializes a global variable with the given key and value.
+/// 
+/// # Arguments
+/// 
+/// * `key` - A string slice that holds the identifier for the global variable
+/// * `val` - A generic value of type T to be stored globally
+/// 
+/// # Safety
+/// 
+/// This function uses unsafe operations internally to store values in global state.
+/// The value is leaked into a static lifetime and its memory address is stored.
 pub fn init_global_var<T>(key: &str, val: T) {
     if let Ok(mut guard) = MTX_VARS.lock() {
         if guard.is_none() {
@@ -17,6 +28,14 @@ pub fn init_global_var<T>(key: &str, val: T) {
     }
 }
 
+/// Removes and drops a global variable of type T stored with the given key.
+///
+/// # Arguments
+/// * `key` - The string key used to identify the global variable
+///
+/// # Safety
+/// This function contains unsafe code for deallocating raw pointers.
+/// Caller must ensure the type T matches the actual stored type.
 pub fn drop_global_var<T>(key: &str) {
     if let Ok(mut guard) = MTX_VARS.lock() {
         let opt_ptr = guard.as_mut().unwrap().remove(key);
@@ -28,6 +47,21 @@ pub fn drop_global_var<T>(key: &str) {
     }
 }
 
+/// Retrieves a reference to a global variable of type T stored with the given key.
+/// 
+/// # Arguments
+/// 
+/// * `key` - The string key used to identify the global variable
+/// 
+/// # Returns
+/// 
+/// * `Ok(&'static T)` - A static reference to the stored value if found
+/// * `Err(String)` - Error message if mutex lock fails or key not found
+/// 
+/// # Safety
+/// 
+/// This function contains unsafe code when dereferencing the stored pointer.
+/// Caller must ensure the type T matches the actual stored type.
 pub fn fetch_global_var<T>(key: &str) -> Result<&'static T, String> {
     if let Ok(guard) = MTX_VARS.lock() {
         if guard.is_none() {
@@ -42,6 +76,21 @@ pub fn fetch_global_var<T>(key: &str) -> Result<&'static T, String> {
     }
 }
 
+/// Retrieves a mutable reference to a global variable of type T by its key.
+///
+/// # Arguments
+///
+/// * `key` - The string key associated with the global variable
+///
+/// # Returns
+///
+/// * `Ok(&'static mut T)` - A mutable static reference to the global variable
+/// * `Err(String)` - Error message if mutex lock fails or key not found
+///
+/// # Safety
+///
+/// This function contains unsafe code for raw pointer dereferencing.
+/// Caller must ensure type T matches the stored variable type.
 pub fn fetch_global_var_mut<T>(key: &str) -> Result<&'static mut T, String> {
     if let Ok(guard) = MTX_VARS.lock() {
         if guard.is_none() {
